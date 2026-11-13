@@ -134,19 +134,13 @@ void pdAdsorbingWallPatch::output
     const fileName& fixedPathName,
     const fileName& timePath
 )
-{
-    /*word nameFile("outputFile.dat");
-    fileName writeFile(pathName/nameFile);
-    Info<<"fixed Path Name:\t"<<fixedPathName<<endl;
-    Info<<"preIE:\t"<<preIE_<<endl;*/
-    
+{  
 }
 
 void pdAdsorbingWallPatch::updateProperties(const dictionary& newDict)
 {
     //- the main properties should be updated first
     updateBoundaryProperties(newDict);
-
     setProperties();
 }
 
