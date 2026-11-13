@@ -62,6 +62,13 @@ pdAdsorbingWallPatch::pdAdsorbingWallPatch
     writeInCase_ = true;
 
     setProperties();
+    if(writeInCase_)
+    {
+        dataFile_ = this->patchName()+"_particleData.dat";
+        std::ofstream file(dataFile_,std::ios::app);
+        file<<"time, typeID, U_X, U_Y, U_Z, origId\n";
+        file.close();
+    }
 }
 
 
@@ -102,7 +109,7 @@ void pdAdsorbingWallPatch::calculateProperties()
 
         forAll(eM.wallQ_.boundaryField()[patchId_],fI)
         {
-            eM.wallQ_.boundaryFieldRef()[patchId_][fI] = totalQ*mag(patch.faceAreas()[fI])/totalPatchSurfaceArea_;
+            eM.wallQ_.boundaryFieldRef()[patchId_][fI] = eM.wallQ_.boundaryField()[patchId_][fI]; //totalQ*mag(patch.faceAreas()[fI])/totalPatchSurfaceArea_;
         }
     }
     else
@@ -115,11 +122,11 @@ void pdAdsorbingWallPatch::calculateProperties()
 
 void pdAdsorbingWallPatch::controlParticle(pdParcel& p, pdParcel::trackingData& td)
 {
-
-        measurePropertiesBeforeControl(p);
-
-        td.keepParticle = false;
-
+    measurePropertiesBeforeControl(p);
+    std::ofstream file(dataFile_,std::ios::app);
+    file<< time_.time().timeOutputValue() <<", "<<p.typeId()<<", "<<p.U().x()<<", "<<p.U().y()<<", "<<p.U().z()<<", "<<p.origId()<<"\n";
+    file.close();
+    td.keepParticle = false;
 }
 
 void pdAdsorbingWallPatch::output
@@ -128,7 +135,11 @@ void pdAdsorbingWallPatch::output
     const fileName& timePath
 )
 {
-
+    /*word nameFile("outputFile.dat");
+    fileName writeFile(pathName/nameFile);
+    Info<<"fixed Path Name:\t"<<fixedPathName<<endl;
+    Info<<"preIE:\t"<<preIE_<<endl;*/
+    
 }
 
 void pdAdsorbingWallPatch::updateProperties(const dictionary& newDict)

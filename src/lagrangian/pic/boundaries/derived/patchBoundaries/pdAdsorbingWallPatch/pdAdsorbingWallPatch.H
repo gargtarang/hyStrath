@@ -83,6 +83,9 @@ private:
 
         labelList typeIds_;
 
+        //Data File to stode particle data colliding with the patch
+        word dataFile_; 
+
 
         //scalar massFlux_;
 
